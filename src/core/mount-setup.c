@@ -384,16 +384,6 @@ int mount_setup(bool loaded_policy) {
          * udevd. */
         dev_setup(NULL);
 
-        /* Mark the root directory as shared in regards to mount
-         * propagation. The kernel defaults to "private", but we think
-         * it makes more sense to have a default of "shared" so that
-         * nspawn and the container tools work out of the box. If
-         * specific setups need other settings they can reset the
-         * propagation mode to private if needed. */
-        if (detect_container(NULL) <= 0)
-                if (mount(NULL, "/", NULL, MS_REC|MS_SHARED, NULL) < 0)
-                        log_warning("Failed to set up the root directory for shared mount propagation: %m");
-
         /* Create a few directories we always want around, Note that
          * sd_booted() checks for /run/systemd/system, so this mkdir
          * really needs to stay for good, otherwise software that
